@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:summary="User can choose to ignore missing requirements"
+        android:title="Ignore missing requirments" />
+
+    <CheckBoxPreference
+        android:key="chkForOn"
+        android:defaultValue="true"
+        android:summary="by default ignores missing level attribute and paint background red"
+        android:title="Ignore missing requirements"
+        />
+
+</PreferenceScreen>
