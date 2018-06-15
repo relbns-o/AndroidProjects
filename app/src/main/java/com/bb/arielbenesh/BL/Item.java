@@ -1,4 +1,4 @@
-package com.bb.arielbenesh.DL;
+package com.bb.arielbenesh.BL;
 
 /**
  * Item object that holds specific wanted json attributes

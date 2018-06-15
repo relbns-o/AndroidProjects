@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".PL.MainActivity">
+        <activity android:name=".PL.MainActivity"
+            android:parentActivityName=".PL.MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PL.MainActivity"
+                />
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,8 +22,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".PL.PrefActivitiy"
-            android:theme="@android:style/Theme.Holo.Light">
+            android:theme="@android:style/Theme.Holo.Light"
+            android:parentActivityName=".PL.MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PL.MainActivity"
+                />
         </activity>
     </application>
-
 </manifest>

@@ -1,6 +1,6 @@
 package com.bb.arielbenesh.DAL;
 
-import com.bb.arielbenesh.DL.Item;
+import com.bb.arielbenesh.BL.Item;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.bb.arielbenesh.PL;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,25 +12,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.bb.arielbenesh.DL.Item;
-import com.bb.arielbenesh.DL.ItemAdapter;
+import com.bb.arielbenesh.BL.Item;
+import com.bb.arielbenesh.BL.ItemAdapter;
+import com.bb.arielbenesh.DAL.AsyncResponse;
 import com.bb.arielbenesh.DAL.JsonHandler;
+import com.bb.arielbenesh.DAL.OkHttpHandler;
 import com.bb.arielbenesh.R;
-import com.bb.arielbenesh.DL.SeparatorDecoration;
+import com.bb.arielbenesh.BL.SeparatorDecoration;
 
 import org.json.JSONException;
 
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements AsyncResponse {
+
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private List<Item> itemsList;
     private Toolbar toolbar;
+
 
     // json source url
     private String url = "http://nikita.hackeruweb.co.il/hackDroid/items.json";
@@ -39,12 +40,18 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Create connection object
+        OkHttpHandler okHttpHandler = new OkHttpHandler();
+
+        // set delegate/listener back to this class
+        okHttpHandler.delegate = this;
+
         // Find the toolbar view inside the activity layout
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         setSupportActionBar(toolbar);
-        // Create connection object
-        OkHttpHandler okHttpHandler = new OkHttpHandler();
+
         // Execute connection
         okHttpHandler.execute(url);
         // Find the recyclerView inside the activity layout
@@ -75,6 +82,9 @@ public class MainActivity extends AppCompatActivity{
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI
                 Intent intent = new Intent(this,PrefActivitiy.class);
@@ -89,34 +99,12 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    // update itemlist with JsonArray the JsonHandler returns (via AsyncResponse interface)
+    @Override
+    public void processFinish(String output) {
 
-    // Inner class of HttpHandler
-    public class OkHttpHandler extends AsyncTask<String, Void, String> {
-
-        OkHttpClient client = new OkHttpClient();
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            Request.Builder builder = new Request.Builder();
-            builder.url(params[0]);
-            Request request = builder.build();
-
-            try {
-                Response response = client.newCall(request).execute();
-                return response.body().string();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        // update itemlist with JsonArray the JsonHandler returns
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try {
-                itemsList = JsonHandler.getCustomListFromJson(s);
+        try {
+                itemsList = JsonHandler.getCustomListFromJson(output);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -129,7 +117,7 @@ public class MainActivity extends AppCompatActivity{
             recyclerView.setAdapter(itemAdapter);
             recyclerView.addItemDecoration(new SeparatorDecoration(getApplicationContext(), Color.BLACK, 1));
             itemAdapter.notifyDataSetChanged();
-        }
+
     }
 
 }

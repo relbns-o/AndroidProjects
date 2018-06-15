@@ -1,4 +1,4 @@
-package com.bb.arielbenesh.DL;
+package com.bb.arielbenesh.BL;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -96,7 +96,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
     }
 
     // check interval
-    public static boolean isBetween(int x, int lower, int upper) {
+    private static boolean isBetween(int x, int lower, int upper) {
         return lower <= x && x <= upper;
     }
 
